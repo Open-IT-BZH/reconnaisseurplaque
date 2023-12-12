@@ -1,0 +1,11 @@
+#output {
+    display: inline-block;
+    top: 4px;
+    position: relative;
+    border: dotted 1px #ccc;
+    padding: 2px;
+  }
+
+  .button {
+    border: solid 2px #ccc;
+  }

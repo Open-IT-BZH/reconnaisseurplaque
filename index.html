@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to record a video with JavaScript</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div>
+      <!-- <button type="button" id="buttonStart">Start</button>
+      <button type="button" id="buttonStop" disabled>Stop</button> -->
+      <button id="cit" onclick="shoot()" class="button">Capture</button>
+      <br/>
+      <div id="output"></div>
+    </div>
+    <div>
+      <video autoplay muted playsinline id="videoLive"></video>
+    </div>
+    <div>
+      <video controls playsinline id="videoRecorded"></video>
+    </div>
+    <script src="main.js"></script>
+  </body>
+</html>
