@@ -17,8 +17,12 @@
     <div>
       <video autoplay muted playsinline id="videoLive"></video>
     </div>
-    <script >
-        async function main () {
+    <div>
+      <video controls playsinline id="videoRecorded"></video>
+    </div>
+    <script src="main.js"></script>
+    <script type="module">
+            async function main () {
             const buttonStart = document.querySelector('#buttonStart')
             const buttonStop = document.querySelector('#buttonStop')
             const videoLive = document.querySelector('#videoLive')
@@ -56,8 +60,6 @@
             })
           }
           
-          main()
-
 
         //   Capture d'écran
         var videoId = 'videoLive';
@@ -89,51 +91,47 @@
             /**
              * Invokes the <code>capture</code> function and attaches the canvas element to the DOM.
              */
-            function shoot() {
-                var video = document.getElementById(videoId);
-                var output = document.getElementById('output');
-                var canvas = capture(video, scaleFactor);
-            
-                // Créer et ajouter un élément d'image à la liste de captures d'écran
-                var imageElement = new Image();
-                imageElement.src = canvas.toDataURL('image/png'); // Convertir le canvas en une URL d'image
-                reconnaissance_plaque(imageElement.src);
+             function shoot() {
+              var video = document.getElementById(videoId);
+              var output = document.getElementById('output');
+              var canvas = capture(video, scaleFactor);
+
+              var imageElement = new Image();
+              imageElement.src = canvas.toDataURL('image/png');
+
+              recognizePlate("plaque.jpg");
             }
 
-        (function() {
-          var captureit = document.getElementById('cit');
-          captureit.click();
-        })();
+            function recognizePlate(imageElement) {
+              console.log("dedans oui");
+              let body = new FormData();
+              body.append("upload", imageElement);
+              body.append("regions", "fr");
 
-
-
-        // Reconaissance plaque
-        function reconnaissance_plaque(image) {
-          
-          console.log("dedans");
-          let image_path = image;
-          fetch(image_path)
-          .then((response) => response.blob())
-          .then((blob) => {
-            let body = new FormData();
-            body.append("upload", blob);
-            // Or body.append('upload', base64Image);
-            body.append("regions", "fr"); // Change to your country
+              fetch("https://api.platerecognizer.com/v1/plate-reader/", {
+                method: "POST",
+                headers: {
+                  Authorization: "Token 9daea60a2a803add4c7e35a9d1e49a743b394d09",
+                },
+                body: body,
+              })
+                .then((res) => res.json())
+                .then((json) =>
+                  console.log("Plaque immatriculation : ", json.results[0].plate)
+                )
+                .catch((err) => {
+                  console.log(err);
+                });
+            }
             
-            return fetch("https://api.platerecognizer.com/v1/plate-reader/", {
-              method: "POST",
-              headers: {
-                Authorization: "Token 9daea60a2a803add4c7e35a9d1e49a743b394d09",
-              },
-              body: body,
-            });
-          })
-          .then((res) => res.json())
-          .then((json) => console.log("Plaque imatriculation : ", json.results[0].plate))
-          .catch((err) => {
-            console.log(err);
-          });
-        }
-    </script>
+            (function() {
+              var captureit = document.getElementById('cit');
+              captureit.click();
+            })();
+
+          main()
+
+
+            </script>
   </body>
 </html>
